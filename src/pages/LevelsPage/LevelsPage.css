@@ -1,0 +1,21 @@
+.levels-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.levels-page h1 {
+  margin: 0 0 0.25rem;
+  font-size: 2rem;
+}
+
+.levels-page__subtitle {
+  margin: 0 0 2rem;
+  color: #6b7280;
+}
+
+.levels-page__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}

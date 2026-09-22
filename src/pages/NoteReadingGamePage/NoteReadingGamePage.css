@@ -1,0 +1,44 @@
+.note-game {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.note-game__back {
+  display: inline-block;
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.note-game__back:hover {
+  text-decoration: underline;
+}
+
+.note-game h1 {
+  margin: 1rem 0 0.25rem;
+  font-size: 2rem;
+}
+
+.note-game__hint {
+  margin: 0 0 2rem;
+  color: #6b7280;
+}
+
+.note-game__staff {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.note-game__reveal {
+  min-height: 1.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.note-game__toggle {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}

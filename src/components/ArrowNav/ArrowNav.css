@@ -1,0 +1,30 @@
+.arrow-nav {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.arrow-nav__button {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.arrow-nav__button:hover:not(:disabled) {
+  background: #f3f4f6;
+}
+
+.arrow-nav__button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.arrow-nav__button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}

@@ -1,0 +1,31 @@
+.games-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.games-page__back {
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.games-page__back:hover {
+  text-decoration: underline;
+}
+
+.games-page h1 {
+  margin: 1rem 0 0.25rem;
+  font-size: 2rem;
+}
+
+.games-page__subtitle {
+  margin: 0 0 2rem;
+  color: #6b7280;
+}
+
+.games-page__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}

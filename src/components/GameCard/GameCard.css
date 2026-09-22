@@ -1,0 +1,40 @@
+.game-card {
+  display: block;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.game-card:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.game-card h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
+}
+
+.game-card p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.game-card--disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.game-card__badge {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: #f3f4f6;
+  font-size: 0.75rem;
+}

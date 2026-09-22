@@ -1,0 +1,11 @@
+.staff {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  color: #1f2937;
+  overflow: visible;
+}
+
+.clef-symbol {
+  font-family: 'Bravura Text', 'Noto Music', 'Segoe UI Symbol', 'Apple Symbols', serif;
+}
