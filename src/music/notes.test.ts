@@ -1,13 +1,12 @@
-import { describe, expect, it, vi } from 'vitest'
-import {
-  getRandomNoteEvent,
-  HAND_BY_CLEF,
-  LEFT_HAND_NOTES,
-  noteName,
-  noteNameEs,
-  noteToDiatonicIndex,
-  RIGHT_HAND_NOTES,
-} from './notes'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { buildOctave, getNotePool, setEnabledClefs, setSelectedNotesForHand } from './exerciseSettings'
+import { getRandomNoteEvent, HAND_BY_CLEF, noteName, noteNameEs, noteToDiatonicIndex } from './notes'
+
+afterEach(() => {
+  setSelectedNotesForHand('right', buildOctave(4))
+  setSelectedNotesForHand('left', buildOctave(3))
+  setEnabledClefs(['treble', 'bass'])
+})
 
 describe('noteNameEs', () => {
   it('translates natural note letters to Spanish solfège syllables', () => {
@@ -34,18 +33,6 @@ describe('noteToDiatonicIndex', () => {
   })
 })
 
-describe('note ranges', () => {
-  it('has exactly one octave (7 natural notes) per hand', () => {
-    expect(RIGHT_HAND_NOTES).toHaveLength(7)
-    expect(LEFT_HAND_NOTES).toHaveLength(7)
-  })
-
-  it('keeps the right hand in octave 4 and the left hand in octave 3', () => {
-    expect(RIGHT_HAND_NOTES.every((note) => note.octave === 4)).toBe(true)
-    expect(LEFT_HAND_NOTES.every((note) => note.octave === 3)).toBe(true)
-  })
-})
-
 describe('getRandomNoteEvent', () => {
   it('pairs treble clef with the right hand and bass clef with the left hand', () => {
     for (let i = 0; i < 50; i += 1) {
@@ -54,12 +41,26 @@ describe('getRandomNoteEvent', () => {
     }
   })
 
-  it('only produces notes within the hand-appropriate octave', () => {
+  it('only produces notes within the hand-appropriate configured octaves', () => {
     for (let i = 0; i < 50; i += 1) {
       const event = getRandomNoteEvent()
-      const pool = event.hand === 'right' ? RIGHT_HAND_NOTES : LEFT_HAND_NOTES
-      expect(pool).toContainEqual(event.note)
+      expect(getNotePool(event.hand)).toContainEqual(event.note)
     }
+  })
+
+  it('draws from every note selected for a hand, even a hand-picked subset', () => {
+    setSelectedNotesForHand('left', [
+      { letter: 'C', octave: 2 },
+      { letter: 'G', octave: 4 },
+    ])
+
+    const notesSeen = new Set<string>()
+    for (let i = 0; i < 200; i += 1) {
+      const event = getRandomNoteEvent()
+      if (event.hand === 'left') notesSeen.add(`${event.note.letter}${event.note.octave}`)
+    }
+
+    expect(notesSeen).toEqual(new Set(['C2', 'G4']))
   })
 
   it('picks randomly rather than always returning the same note', () => {
@@ -71,5 +72,23 @@ describe('getRandomNoteEvent', () => {
     randomSpy.mockRestore()
 
     expect(first).not.toEqual(second)
+  })
+
+  it('only produces the enabled clef when just one is enabled', () => {
+    setEnabledClefs(['bass'])
+
+    for (let i = 0; i < 50; i += 1) {
+      expect(getRandomNoteEvent().clef).toBe('bass')
+    }
+  })
+
+  it('never immediately repeats the previous note for the same hand', () => {
+    for (let i = 0; i < 100; i += 1) {
+      const previous = getRandomNoteEvent()
+      const next = getRandomNoteEvent(previous)
+      if (next.hand === previous.hand) {
+        expect(next.note).not.toEqual(previous.note)
+      }
+    }
   })
 })

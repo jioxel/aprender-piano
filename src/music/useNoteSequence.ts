@@ -15,13 +15,15 @@ export interface UseNoteSequenceResult {
  * replays earlier notes so the learner can double check one they just read.
  */
 export function useNoteSequence(
-  generateNote: () => NoteEvent = getRandomNoteEvent,
+  generateNote: (previous?: NoteEvent) => NoteEvent = getRandomNoteEvent,
 ): UseNoteSequenceResult {
   const [history, setHistory] = useState<NoteEvent[]>(() => [generateNote()])
   const [index, setIndex] = useState(0)
 
   const goNext = useCallback(() => {
-    setHistory((prev) => (index < prev.length - 1 ? prev : [...prev, generateNote()]))
+    setHistory((prev) =>
+      index < prev.length - 1 ? prev : [...prev, generateNote(prev[prev.length - 1])],
+    )
     setIndex((i) => i + 1)
   }, [index, generateNote])
 

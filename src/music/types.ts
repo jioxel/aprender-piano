@@ -4,6 +4,8 @@ export type Hand = 'right' | 'left'
 
 export type NoteLetter = 'C' | 'D' | 'E' | 'F' | 'G' | 'A' | 'B'
 
+export const NOTE_LETTERS: NoteLetter[] = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
+
 export interface Note {
   letter: NoteLetter
   octave: number

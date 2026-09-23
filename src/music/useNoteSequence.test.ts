@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { useNoteSequence } from './useNoteSequence'
 import type { NoteEvent } from './types'
 
@@ -54,5 +54,15 @@ describe('useNoteSequence', () => {
     act(() => result.current.goNext())
 
     expect(result.current.current).toBe(second)
+  })
+
+  it('passes the previous note to generateNote so it can avoid repeats', () => {
+    const generateNote = vi.fn(makeGenerator())
+    const { result } = renderHook(() => useNoteSequence(generateNote))
+    const first = result.current.current
+
+    act(() => result.current.goNext())
+
+    expect(generateNote).toHaveBeenLastCalledWith(first)
   })
 })

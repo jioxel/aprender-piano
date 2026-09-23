@@ -37,6 +37,10 @@
   margin-bottom: 1.5rem;
 }
 
+.note-game__piano {
+  margin-top: 2rem;
+}
+
 .note-game__toggle {
   display: flex;
   justify-content: center;

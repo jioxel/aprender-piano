@@ -1,6 +1,6 @@
+import { getEnabledClefs, getNotePool } from './exerciseSettings'
+import { NOTE_LETTERS } from './types'
 import type { Clef, Hand, Note, NoteEvent, NoteLetter } from './types'
-
-const NOTE_LETTERS: NoteLetter[] = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
 
 function letterIndex(letter: NoteLetter): number {
   return NOTE_LETTERS.indexOf(letter)
@@ -15,7 +15,7 @@ export function noteName(note: Note): string {
   return `${note.letter}${note.octave}`
 }
 
-const NOTE_LETTER_ES: Record<NoteLetter, string> = {
+export const NOTE_LETTER_ES: Record<NoteLetter, string> = {
   C: 'Do',
   D: 'Re',
   E: 'Mi',
@@ -44,26 +44,25 @@ export const HAND_LABEL: Record<Hand, string> = {
   left: 'Mano izquierda',
 }
 
-function buildOctave(octave: number): Note[] {
-  return NOTE_LETTERS.map((letter) => ({ letter, octave }))
-}
-
-/** One octave per hand, as requested: right hand around middle C going up, left hand the octave below. */
-export const RIGHT_HAND_NOTES: Note[] = buildOctave(4)
-export const LEFT_HAND_NOTES: Note[] = buildOctave(3)
-
-export const NOTES_BY_HAND: Record<Hand, Note[]> = {
-  right: RIGHT_HAND_NOTES,
-  left: LEFT_HAND_NOTES,
-}
-
 function pickRandom<T>(items: T[]): T {
   return items[Math.floor(Math.random() * items.length)]
 }
 
-export function getRandomNoteEvent(): NoteEvent {
-  const clef = pickRandom<Clef>(['treble', 'bass'])
+function isSameNote(a: Note, b: Note): boolean {
+  return a.letter === b.letter && a.octave === b.octave
+}
+
+/**
+ * Generates a random note event. When `previous` is given and lands on the same hand,
+ * the previous note is excluded from the pool so the exercise never repeats the same
+ * note twice in a row.
+ */
+export function getRandomNoteEvent(previous?: NoteEvent): NoteEvent {
+  const clef = pickRandom<Clef>(getEnabledClefs())
   const hand = HAND_BY_CLEF[clef]
-  const note = pickRandom(NOTES_BY_HAND[hand])
+  const pool = getNotePool(hand)
+  const candidates =
+    previous && previous.hand === hand ? pool.filter((note) => !isSameNote(note, previous.note)) : pool
+  const note = pickRandom(candidates.length > 0 ? candidates : pool)
   return { note, clef, hand }
 }
